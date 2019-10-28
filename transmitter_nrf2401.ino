@@ -1,5 +1,5 @@
 #include <SPI.h>
-#include "RF24.h"
+#include "RF24.h"                             // Must download library from Arduino site
 #define CEpin 7                               //The CE pin (pin 3) of the nRF24L01 can be connected to any digital pin.
 #define CSpin 8                               //The CS pin (pin 4) of the nRF24L01 can be connected to any digital pin.
 #define SizeOfMessage 27                      //The size of the message to be sent.
