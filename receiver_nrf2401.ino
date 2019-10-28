@@ -78,8 +78,9 @@ void loop()
   if (myRadio.available()){
     myRadio.read(&message, SizeOfMessage);
   }
-
-      // Need forward & back
-      
-    
+  
+  for(int i = 0, i < sizeOfMessage; i++){
+    Serial.println(message[i]);
+  }
+  
 }
