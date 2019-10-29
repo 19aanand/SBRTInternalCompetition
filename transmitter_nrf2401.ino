@@ -1,5 +1,6 @@
+#include <RF24.h>
 #include <SPI.h>
-#include "RF24.h"                             // Must download library from Arduino site
+
 #define CEpin 7                               //The CE pin (pin 3) of the nRF24L01 can be connected to any digital pin.
 #define CSpin 8                               //The CS pin (pin 4) of the nRF24L01 can be connected to any digital pin.
 #define SizeOfMessage 27                      //The size of the message to be sent.
@@ -16,7 +17,7 @@ void setup()
   myRadio.begin();
   myRadio.setChannel(Channel);                //Set the communication channel. 0-125. Transmitter and reciener have to be on the same channel.
   myRadio.setPALevel(PALevel);                //Set the power amplifier level. MIN,LOW,HIGH,MAX. MAX for best range, MIN for less current (to work with shitty +3.3V).
-  myRadio.setDataRate(DataRate);              //Set the data rate. 250KBPS, 1MBPS, 2MBPS.
+  myRadio.setDataRate(DataRate);              //Set the data rate. 250KBPS, 1MBPS, 2MBPS. Lowest datarate works with widest range.
   myRadio.openWritingPipe(addresses[0]);      //Still not sure about the pipe things, but It seems that this is the standard way of doing it.
   message[0] = 255;                           //Setting up the first message so it is valid (so if we don't get data from the computer we can still send an all zero message).
   message[1] = 255;
@@ -31,10 +32,9 @@ void setup()
   message[26] = 3;
 }
 
-void loop()
-{
+void loop(){
   Serial.flush();                             //Making sure we get to the most recent message.
-  while(Serial.available()<SizeOfMessage){     //Waiting for a message to come in.
+  while(Serial.available()<SizeOfMessage){    //Waiting for a message to come in. (If data in buffer is less than 27, then send message)
     myRadio.write(message, SizeOfMessage);    //And while we wait, sending the data we already have.
   }
   
@@ -62,4 +62,5 @@ void loop()
   }
   
   myRadio.write(message, SizeOfMessage);      //This transmits the message to be transmitted (will work with whatever size message we make).
+  
 }
